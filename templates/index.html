@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Department Cluster Ring</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+      #tooltip {
+        min-width: 100px;
+        min-height: 50px;
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tab">
+      <div id="diveInDesc">
+        Dive-in Department Mode: 
+        <label class="switch">
+          <input type="checkbox" id="toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      
+    </div>
+    <div id="container"> 
+      <svg width="500pt" height="500pt" id="clusterRing" viewBox="0.00 0.00 550 550">
+         <defs>
+            <linearGradient id="like-msg" gradientTransform="rotate(90)">
+              <stop offset="50%"  stop-color="#004d99" />
+              <stop offset="50%" stop-color="#4d9900" />
+            </linearGradient>
+
+            <linearGradient id="like-cpn" gradientTransform="rotate(90)">
+              <stop offset="50%"  stop-color="#004d99" />
+              <stop offset="50%" stop-color="#99004D" />
+            </linearGradient>
+
+            <linearGradient id="msg-cpn" gradientTransform="rotate(90)">
+              <stop offset="50%"  stop-color="#4d9900" />
+              <stop offset="50%" stop-color="#99004D" />
+            </linearGradient>
+
+            <linearGradient id="like-msg-cpn" gradientTransform="rotate(90)">
+              <stop offset="33.3%"  stop-color="#004d99" />
+              <stop offset="33.3%" stop-color="#4d9900" />
+              <stop offset="66.6%" stop-color="#4d9900" />
+              <stop offset="66.6%" stop-color="#99004D" />
+            </linearGradient>
+        </defs>
+
+      </svg>
+      
+      <!--<div id="legend">
+          <h4>Legend</h4>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #004d9999"></div> <div class="legendLine" style="border-color: #4d990099"></div> <div class="legendLine" style="border-color: #99004D99"></div>
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like, Message and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #4d990099; width: 37.5px"></div> <div class="legendLine" style="border-color: #99004D99; width: 37.5px"></div>
+              </div>
+              <div class="itemdetail dscrpt">
+                  Message and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #004d9999; width: 37.5px"></div> <div class="legendLine" style="border-color: #99004D99; width: 37.5px"></div>
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #004d9999; width: 37.5px"></div> <div class="legendLine" style="border-color: #4d990099; width: 37.5px"></div>
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like and Message
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                <div class="legendLine" style="border-color: #99004D99; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #4d990099; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Message
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #004d9999; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #cccccc99; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Friends with no interactions
+              </div>
+          </div>
+      </div>-->
+      <div id="panel">
+      	<div id="ConnLegend">
+          <h4>Interaction Types</h4>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #93003a; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like, Message and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #ff28fd; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Message and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #fb4c89; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like and Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #17A620; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like and Message
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                <div class="legendLine" style="border-color: #c84248; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Companion
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #0A91C6; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Message
+              </div>
+          </div>
+          <div class="item">
+              <div class="itemdetail sample">
+                  <div class="legendLine" style="border-color: #54DEAB; width: 75px"></div> 
+              </div>
+              <div class="itemdetail dscrpt">
+                  Like
+              </div>
+          </div>
+      	</div>
+
+        <div id="ownerLegend">
+          <h4>Disciplines</h4>
+          <div class="ownerItem">
+              <div class="ownerDetail ownerSample" style="color: #e78ac3">·</div>
+              <div class="ownerDetail ownerDscrpt">
+                  Humanities
+              </div>
+          </div>
+          <div class="ownerItem">
+              <div class="ownerDetail ownerSample" style="color: #8da0cb">·</div>
+              <div class="ownerDetail ownerDscrpt">
+                  Sociology
+              </div>
+          </div>
+          <div class="ownerItem">
+              <div class="ownerDetail ownerSample" style="color: #fc8d62">·</div>
+              <div class="ownerDetail ownerDscrpt">
+                  (Independent classification) Business management 
+              </div>
+          </div>
+          <div class="ownerItem">
+              <div class="ownerDetail ownerSample" id="technologySample" style="color: #66c2a5">·</div>
+              <div class="ownerDetail ownerDscrpt" id="technology">
+                  Technology
+              </div>
+          </div>
+        </div>
+
+	      <svg width="132pt" height="210pt" id="edgeInformation" viewBox="0.00 0.00 220 350">
+
+          <text x="30" y="20" fill="black">like</text>
+          <text x="70" y="20" fill="black">message</text>
+          <text x="130" y="20" fill="black">companion</text>
+
+	      	<rect x="30" y="30"  width="25" height="0" id="likeBar" fill="#54DEAB"/>
+  			  <rect x="95" y="30" width="25" height="0" id="messageBar" fill="#0A91C6"/>
+  			  <rect x="160" y="30" width="25" height="0" id="companionBar" fill="#c84248"/>
+          <text x="30" y="340" fill="black">Detailed interaction info</text>
+          
+          <text x="30" id="likeCount" y="45" fill="black">0</text>
+          <text x="90" id="messageCount" y="45" fill="black">0</text>
+          <text x="165" id="companionCount" y="45" fill="black">0</text>
+
+	      </svg>
+      </div>
+      
+
+    </div>
+    <script src="static/main.js"></script>
+  </body>
+</html>
