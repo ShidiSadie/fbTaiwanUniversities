@@ -350,7 +350,7 @@
                 cmpnNum = 0
               }
 
-              drawHistogram(likeNum, cmpnAct, msgNum, msgAct, cmpnNum, cmpnAct);
+              drawHistogram(likeNum, likeAct, msgNum, msgAct, cmpnNum, cmpnAct);
 
               outsideConns.style('opacity', 0);
             }
