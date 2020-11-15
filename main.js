@@ -9,6 +9,12 @@
     //.attr('stroke', 'black')
 
   d3.select('#clusterRing').append('g')
+    .attr('id', 'inside_dep_connections')
+
+  d3.select('#clusterRing').append('g')
+    .attr('id', 'outside_dep_connections')
+
+  d3.select('#clusterRing').append('g')
     .attr('id', 'connections')
 
   d3.select('#clusterRing').append('g')
@@ -22,6 +28,8 @@
   const t = owners.transition().duration(750);
   const t2 = d3.select('#connections').transition().duration(750);
   const t3 = d3.select('#edgeInformation').transition().duration(750);
+  const t4 = d3.select('#inside_dep_connections').transition().duration(750);
+  const t5 = d3.select('#outside_dep_connections').transition().duration(750);
 
   var toggle = document.getElementById("toggle");
 
@@ -31,19 +39,83 @@
     if (toggle.checked) {
       d3.select("#connections").selectAll('path')
       .remove();
-    owners.selectAll("circle")
-      .attr("fill", d=> { return d.color})
+      owners.selectAll("circle")
+        .attr("fill", d => {return d.color});
+      function draw(path, start_point_x, start_point_y, end_point_x, end_point_y) {
+        path.moveTo(start_point_x, start_point_y);
+        path.lineTo(end_point_x, end_point_y); 
+        return path; 
+      }
+      d3.json("datasets/conn_inside_dep.json")
+      .then( data => {
+        console.log(data);
+          d3.select('#inside_dep_connections').selectAll("path")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr('d', function(d) { return draw( d3.path(), 4*d.start_pos.x+395, 4*d.start_pos.y+340, 4*d.end_pos.x+395, 4*d.end_pos.y+340); } )
+            .attr('fill', 'none')
+            .attr('opacity', 0)
+            .attr('stroke', function(d) { return d.color; });
+        });
+
+      d3.json("datasets/conn_outside_dep.json")
+      .then( data => {
+          console.log(data);
+          d3.select('#outside_dep_connections').selectAll("path")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr('d', function(d) { return draw( d3.path(), 4*d.start_pos.x+395, 4*d.start_pos.y+340, d.end_pos.x, d.end_pos.y); } )
+            .attr('fill', 'none')
+            .attr('opacity', 0)
+            .attr('stroke', function(d) { return d.color; });
+
+        });
     }
     else {
-      d3.select("#connections").selectAll('path')
+      d3.select("#inside_dep_connections").selectAll('path')
+      .remove();
+      d3.select("#outside_dep_connections").selectAll('path')
       .remove();
        owners.selectAll("circle")
         .attr("cx", d => {return d.pos.x;})
         .attr("cy", d => {return d.pos.y;})
-        .attr("r", 10);
+        .attr("r", 10)
+        .attr("fill", d => {return d.color});
       drawEdge();
     }
   };
+
+  function drawHistogram(likeNum, likeAct, msgNum, msgAct, cmpnNum, cmpnAct)
+  {
+    d3.select('#likeCount')
+    .transition(t3)
+    .attr("y", likeNum*30+45)
+    .text(likeAct);
+
+    d3.select('#messageCount')
+    .transition(t3)
+    .attr("y", msgNum*30+45)
+    .text(msgAct);
+
+    d3.select('#companionCount')
+    .transition(t3)
+    .attr("y", cmpnNum*30+45)
+    .text(cmpnAct);
+
+    d3.select('#likeBar')
+    .transition(t3)
+    .attr("height", likeNum*30);
+    
+    d3.select('#messageBar')
+    .transition(t3)
+    .attr("height", msgNum*30);
+    
+    d3.select('#companionBar')
+    .transition(t3)
+    .attr("height", cmpnNum*30);
+  }
 
   function drawEdge() {
     d3.json("datasets/department_data.json")
@@ -179,32 +251,7 @@
 
             if (remainingEdge == 1)
             {
-                d3.select('#likeCount')
-                .transition(t3)
-                .attr("y", likeNum*30+45)
-                .text(likeAct);
-
-                d3.select('#messageCount')
-                .transition(t3)
-                .attr("y", msgNum*30+45)
-                .text(msgAct);
-
-                d3.select('#companionCount')
-                .transition(t3)
-                .attr("y", cmpnNum*30+45)
-                .text(cmpnAct);
-
-                d3.select('#likeBar')
-                .transition(t3)
-                .attr("height", likeNum*30);
-                
-                d3.select('#messageBar')
-                .transition(t3)
-                .attr("height", msgNum*30);
-                
-                d3.select('#companionBar')
-                .transition(t3)
-                .attr("height", cmpnNum*30);
+                drawHistogram(likeNum, likeAct, msgNum, msgAct, cmpnNum, cmpnAct)
             }
 
             d3.select('#resetArea')
@@ -220,85 +267,213 @@
         }
 
         else {
+          function getStyle(element, attr) {
+            if(element.currentStyle) {
+                    return element.currentStyle[attr];
+            } else {
+                    return getComputedStyle(element, false)[attr];
+            }
+          }
+          var insideConns = d3.select('#inside_dep_connections').selectAll('path');
+          var outsideConns = d3.select('#outside_dep_connections').selectAll('path');
+          var remainingEdge = 0;
+          var onlySource;
+          var onlyTarget;
+          var likeNum = 0;
+          var msgNum = 0;
+          var cmpnNum = 0;
+          var likeAct = 0;
+          var msgAct = 0;
+          var cmpnAct = 0;
 
-          d3.select('#connections').selectAll('path')
-              .remove();
           if ( this.getAttribute("cx")!= p.pos.x || this.getAttribute("cy")!= p.pos.y)
           {
-            d3.json("datasets/conn_inside_dep.json")
-            .then( data => {
-
-                function draw(path, start_point_x, start_point_y, end_point_x, end_point_y) {
-                  path.moveTo(start_point_x, start_point_y);
-                  path.lineTo(end_point_x, end_point_y); 
-                  return path; 
-                }
-
-                var connections = d3.select('#connections');
-                for (var i=0; i<data.length; i++)
+            insideConns.style('opacity', function(d) {
+              if (getStyle(this, 'opacity')>0)
+              {
+                if (d.source == p.id || d.target == p.id)
                 {
-                  if (data[i].source == p.id || data[i].target == p.id)
-                  {
-                    console.log(data[i].source, data[i].target, p.id);
-                    console.log(p.spreading_pos.x, p.spreading_pos.y);
-                    console.log(data[i].start_pos.x, data[i].start_pos.y);
-                    console.log(data[i].end_pos.x, data[i].end_pos.y);
-                    connections.append('path')
-                    .attr('d', draw( d3.path(), 4*data[i].start_pos.x+395, 4*data[i].start_pos.y+340, 4*data[i].end_pos.x+395, 4*data[i].end_pos.y+340) )
-                    .attr('fill', 'none')
-                    .attr('stroke', data[i].color );
-                  }
-                  
+                  remainingEdge = remainingEdge+1;
+                  onlySource = d.source;
+                  onlyTarget = d.target;
                 }
+                return 0.5
+              }
+              else
+              {
+                return 0;
+              }
+            })
 
+            if (remainingEdge == 1)
+            {
+              insideConns.style('opacity', function(d) {
+                if (d.source == onlySource && d.target == onlyTarget) 
+                  {
+                    likeAct = d.like;
+                    msgAct = d.message;
+                    cmpnAct = d.companion;
+                    return 1;
+                  }
+                else return getStyle(this, 'opacity');
               });
 
-            d3.json("datasets/conn_outside_dep.json")
-            .then( data => {
-
-                function draw(path, start_point_x, start_point_y, end_point_x, end_point_y) {
-                  path.moveTo(start_point_x, start_point_y);
-                  path.lineTo(end_point_x, end_point_y); 
-                  return path; 
-                }
-
-                var connections = d3.select('#connections');
-                for (var i=0; i<data.length; i++)
-                {
-                  if (data[i].source == p.id)
-                  {
-                    connections.append('path')
-                    .attr('d', draw( d3.path(), 4*data[i].start_pos.x+395, 4*data[i].start_pos.y+340, data[i].end_pos.x, data[i].end_pos.y) )
-                    .attr('fill', 'none')
-                    .attr('stroke', data[i].color );
-                  }
-                  
-                }
-
+              circles.attr("fill", d=> {
+                if (d.id == onlySource || d.id == onlyTarget) return d.color;
+                else return "#eee";
               });
+
+              if (likeAct>0)
+              {
+                likeNum = Math.log(likeAct)
+              }
+              else
+              {
+                likeNum = 0
+              }
+
+              if (msgAct>0)
+              {
+                msgNum = Math.log(msgAct)
+              }
+              else
+              {
+                msgNum = 0
+              }
+
+              if (cmpnAct>0)
+              {
+                cmpnNum = Math.log(cmpnAct)
+              }
+              else
+              {
+                cmpnNum = 0
+              }
+
+              drawHistogram(likeNum, cmpnAct, msgNum, msgAct, cmpnNum, cmpnAct);
+
+              outsideConns.style('opacity', 0);
+            }
+
+            else
+            {
+              var ownerRecord = new Array();
+              var depRecord = new Array();
+
+              insideConns.style('opacity', d=>{
+                if (d.source == p.id || d.target == p.id) 
+                {
+                  ownerRecord[d.source] = 1;
+                  ownerRecord[d.target] = 1;
+                  return 1;
+                }
+                else return 0;
+              });
+
+              outsideConns.style('opacity', d=>{
+                if (d.source == p.id) {
+                  depRecord[d.tgt_dep] = 1;
+                  return 1;
+                }
+                else return 0;
+              });
+
+              circles.attr("fill", d=> {
+                if (ownerRecord[d.id] || depRecord[d.dep+1]) return d.color;
+                else return "#eee";
+              });
+            }
+
           }
           else
           {
+            outsideConns.style('opacity', function(d) {
+              if (d.tgt_dep == p.dep+1 && getStyle(this, 'opacity')>0)
+              {
+                remainingEdge = remainingEdge+1;
+                onlySource = d.source;
+                onlyTarget = d.tgt_dep;
+              }
+            });
+            if (remainingEdge == 1)
+            {
+              outsideConns.style('opacity', function(d) {
+                if (d.source == onlySource && d.tgt_dep == onlyTarget) 
+                {
+                  likeAct = d.like;
+                  msgAct = d.message;
+                  cmpnAct = d.companion;
+                  return 1;
+                }
+                else return 0;
+              });
 
-            circles.transition(t)
-            .attr("cx", d => {
-              if (d.dep == p.dep) 
-                return 4*d.spreading_pos.x+400;
+              circles.attr("fill", d=> {
+                if (d.id == onlySource || d.dep == onlyTarget-1) return d.color;
+                else return "#eee";
+              });
+
+              if (likeAct>0)
+              {
+                likeNum = Math.log(likeAct)
+              }
               else
-                return d.pos.x;
-            })
-            .attr("cy", d => { 
-              if (d.dep == p.dep) 
-                return 4*d.spreading_pos.y+350;
+              {
+                likeNum = 0
+              }
+
+              if (msgAct>0)
+              {
+                msgNum = Math.log(msgAct)
+              }
               else
-                return d.pos.y;
-            })
-            .attr("r", d=> { 
-              if (d.dep == p.dep) 
-                return d.size;
+              {
+                msgNum = 0
+              }
+
+              if (cmpnAct>0)
+              {
+                cmpnNum = Math.log(cmpnAct)
+              }
               else
-                return 10;
-            })
+              {
+                cmpnNum = 0
+              }
+
+              drawHistogram(likeNum, likeAct, msgNum, msgAct, cmpnNum, cmpnAct);
+
+              insideConns.style('opacity', 0);
+            }
+            else 
+            {
+              insideConns.style("opacity", 0);
+
+              outsideConns.style("opacity", 0);
+
+              circles.transition(t)
+              .attr("cx", d => {
+                if (d.dep == p.dep) 
+                  return 4*d.spreading_pos.x+400;
+                else
+                  return d.pos.x;
+              })
+              .attr("cy", d => { 
+                if (d.dep == p.dep) 
+                  return 4*d.spreading_pos.y+350;
+                else
+                  return d.pos.y;
+              })
+              .attr("r", d=> { 
+                if (d.dep == p.dep) 
+                  return d.size;
+                else
+                  return 10;
+              })
+              .attr("fill", d => {
+                  return d.color;
+              });
+            }
+            
           }
           
           d3.select('#resetArea')
@@ -307,10 +482,14 @@
               circles.transition(t)
               .attr("cx", d => {return d.pos.x;})
               .attr("cy", d => {return d.pos.y;})
-              .attr("r", 10);
+              .attr("r", 10)
+              .attr("fill", d => {
+                  return d.color;
+              });
 
-              d3.select('#connections').selectAll('path')
-              .remove();
+              insideConns.style("opacity", 0);
+
+              outsideConns.style("opacity", 0);
 
             });
 

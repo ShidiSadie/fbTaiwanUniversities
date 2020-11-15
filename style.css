@@ -6,6 +6,14 @@
 	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
 }
 
+#outside_dep_connections {
+	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
+}
+
+#inside_dep_connections {
+	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
+}
+
 #labels {
 	-webkit-transform: rotateX(180deg) scaleX(0.190) scaleY(0.190) translateX(1080px) translateY(-1830px);
 }
