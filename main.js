@@ -379,7 +379,7 @@
               });
 
               circles.attr("fill", d=> {
-                if (ownerRecord[d.id] || depRecord[d.dep+1]) return d.color;
+                if (ownerRecord[d.id] || depRecord[d.dep]) return d.color;
                 else return "#eee";
               });
             }
@@ -388,7 +388,7 @@
           else
           {
             outsideConns.style('opacity', function(d) {
-              if (d.tgt_dep == p.dep+1 && getStyle(this, 'opacity')>0)
+              if (d.tgt_dep == p.dep && getStyle(this, 'opacity')>0)
               {
                 remainingEdge = remainingEdge+1;
                 onlySource = d.source;
@@ -409,7 +409,7 @@
               });
 
               circles.attr("fill", d=> {
-                if (d.id == onlySource || d.dep == onlyTarget-1) return d.color;
+                if (d.id == onlySource || d.dep == onlyTarget) return d.color;
                 else return "#eee";
               });
 
