@@ -177,6 +177,7 @@
                 .attr("stroke", function(d) {
                   if ((d.source == p.dep || d.target == p.dep) && this.getAttribute("stroke")!="rgb(238, 238, 238)" && this.getAttribute("stroke")!="#eee")
                   {
+                    console.log(p.dep);
                     remainingEdge = remainingEdge+1;
                     selectedDep[d.source-1] = 1;
                     selectedDep[d.target-1] = 1;
@@ -235,7 +236,7 @@
                   }
               })
             }
-
+            console.log(selectedDep);
             circles.transition(t).
             attr("fill", d => { 
               if (selectedDep[d.dep-1])
