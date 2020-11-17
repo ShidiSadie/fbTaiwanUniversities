@@ -1,21 +1,21 @@
 #owners {
-	-webkit-transform: rotateX(180deg) scaleX(0.196) scaleY(0.196) translateX(1020px) translateY(-1800px);
+	-webkit-transform: rotateX(180deg) scaleX(0.196) scaleY(0.196) translateX(1090px) translateY(-1890px);
 }
 
 #connections {
-	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
+	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1100px) translateY(-1890px);
 }
 
 #outside_dep_connections {
-	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
+	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1100px) translateY(-1890px);
 }
 
 #inside_dep_connections {
-	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1030px) translateY(-1800px);
+	-webkit-transform: rotateX(180deg) scaleX(0.195) scaleY(0.195) translateX(1100px) translateY(-1890px);
 }
 
 #labels {
-	-webkit-transform: rotateX(180deg) scaleX(0.20) scaleY(0.20) translateX(1000px) translateY(-1780px);
+	-webkit-transform: rotateX(180deg) scaleX(0.196) scaleY(0.196) translateX(1100px) translateY(-1900px);
 }
 
 /*text {
