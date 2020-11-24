@@ -504,14 +504,14 @@
             //if not only one edge is left, then we need to spread that cluster
             else 
             {
-              insideConns.style("opacity", 0);
-
-              outsideConns.style("opacity", 0);
-
+              var idRecord = new Array();
               circles.transition(t)
               .attr("cx", d => {
                 if (d.dep == p.dep) 
+                {
+                  idRecord[d.id] = 1;
                   return 4*d.spreading_pos.x+400;
+                }
                 else
                   return d.pos.x;
               })
@@ -530,6 +530,14 @@
               .attr("fill", d => {
                   return d.color;
               });
+
+              insideConns.style("opacity", d=> {
+                if (idRecord[d.source] || idRecord[d.target])
+                  return 1;
+                else
+                  return 0; });
+
+              outsideConns.style("opacity", 0);
             }
             
           }
