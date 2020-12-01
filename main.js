@@ -38,19 +38,261 @@
 
   //The toggle to turn the dive-in mode on and off
   var toggle = document.getElementById("toggle");
+  var toggleGender = document.getElementById("toggleGender");
+
+  var selectedDep = [];
+  var spreadDep = false;
+  var onlySource;
+  var onlyTarget;
+  var remainingEdge;
+  var ownerRecord = new Array();
+  var depRecord = new Array();
 
   //Draw edges between departments after webpage loaded
   drawEdge();
 
+  //Changing Owner Legend
+  var ownerLegend = d3.select("#ownerLegend");
+
+  function changeLegendGender(){
+     // console.log("ownerLegend text = ", ownerLegend.select("#humanitiesSample").selectAll("circles"));
+      ownerLegend.nodes()[0].childNodes[1].textContent = "Gender";
+
+      var ownerDscrpt = ownerLegend.selectAll(".ownerDscrpt").nodes();
+     // var ownerSample =  ownerLegend.selectAll(".ownerSample").nodes();
+
+      ownerLegend.select("#businessSample").style("color", "#ffffff");
+      ownerLegend.select("#technologySample").style("color", "#ffffff");
+
+      ownerDscrpt.forEach(function(d){
+        if(d.id == "humanities"){
+          d.textContent = "Female";
+        }else if(d.id == "sociology"){
+          d.textContent = "Male";
+        }else{
+          d.textContent = "";
+        }
+      })
+  }//end function
+
+  function changeLegendDisciplines(){
+      ownerLegend.nodes()[0].childNodes[1].textContent = "Disciplines";
+
+      var ownerDscrpt = ownerLegend.selectAll(".ownerDscrpt").nodes();
+      ownerLegend.select("#businessSample").style("color", "#fc8d62");
+      ownerLegend.select("#technologySample").style("color", "#66c2a5");
+
+      ownerDscrpt.forEach(function(d){
+        if(d.id == "humanities"){
+          d.textContent = "Humanities";
+        }else if(d.id == "sociology"){
+          d.textContent = "Sociology";
+        }else if(d.id == "business"){
+          d.textContent = "(Independent classification) Business management";
+        } else{
+          d.textContent = "Technology";
+        }
+        
+      })
+  }//end function
+
+  function changeColorGender(){
+    //TODO check if selected
+    if(toggle.checked == false){
+      var numberSelectedDep = 0;
+      selectedDep.forEach(function(d){
+        if(d == 1){
+          numberSelectedDep++;
+        }
+      })
+      //console.log("numberSelectedDep == ", numberSelectedDep);
+
+      if(numberSelectedDep == 0){
+        owners.selectAll("circle")
+          .attr("fill", "d3d3d3");
+      }else{
+        owners.selectAll("circle").transition(t).
+        attr("fill", d => { 
+          //if in selcted dep
+          if (selectedDep[d.dep-1])
+          {
+            //Change to gender color
+           return "d3d3d3";
+            
+          }
+          else
+          {
+            return "#eee";
+          }
+          
+        });
+      }
+    }else{
+      if(spreadDep){
+        //console.log("spread dep true");
+        if(remainingEdge == 1){
+          //console.log("remainingEdge is 1 changing");
+          //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
+          //clicked inside another attach
+           owners.selectAll("circle").attr("fill", d=> {
+            if (d.id == onlySource || d.id == onlyTarget){
+              return "d3d3d3";
+            }
+            else{
+              //console.log("d.id eeee ", d.id);
+             return "#eee";
+           }
+          });
+
+        }else{
+          //console.log("remainingEdge is not 1 changing");
+
+          owners.selectAll("circle").attr("fill", d=> {
+            if (ownerRecord[d.id] || depRecord[d.dep]) {
+              return "d3d3d3";
+            }
+            else return "#eee";
+          });
+        }
+      }else{
+         //console.log("spread dep false");
+         if(remainingEdge == 1){
+          //console.log("remainingEdge is 1 changing");
+          //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
+          owners.selectAll("circle").attr("fill", d=> {
+            if (d.id == onlySource || d.dep == onlyTarget){
+              //console.log("onlySource = ", onlySource, "  d.id = ", d.id, "onlyTarget = ", onlyTarget, " d.dep = ", d.dep);
+              return "d3d3d3";
+            }
+            else{
+              //console.log("d.id eeee ", d.id);
+             return "#eee";
+           }
+          });
+         }else{
+          //console.log("remainingEdge is not 1 changing");
+          owners.selectAll("circle")
+          .attr("fill", "d3d3d3");
+         }
+      }
+
+    }//else dive in mode
+
+
+
+
+  }//end function
+
+  function changeColorDisciplines(){
+    //TODO check if selected some make grey
+    if(toggle.checked == false){
+      var numberSelectedDep = 0;
+      selectedDep.forEach(function(d){
+        if(d == 1){
+          numberSelectedDep++;
+        }
+      })
+      //console.log("numberSelectedDep == ", numberSelectedDep);
+
+      if(numberSelectedDep == 0){
+        owners.selectAll("circle")
+          .attr("fill", d => {return d.color});
+      }else{
+        owners.selectAll("circle").transition(t).
+        attr("fill", d => { 
+          //if in selcted dep
+          if (selectedDep[d.dep-1])
+          {
+            //console.log("in selected dep", d.dep);
+              return d.color;
+          }
+          else
+          {
+            return "#eee";
+          }
+          
+        })
+      }
+    }else{
+      if(spreadDep){
+        //console.log("spread dep true");
+        if(remainingEdge == 1){
+          //console.log("remainingEdge is 1 changing");
+          //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
+          //clicked inside another attach
+           owners.selectAll("circle").attr("fill", d=> {
+            if (d.id == onlySource || d.id == onlyTarget){
+              return d.color;
+            }
+            else{
+              //console.log("d.id eeee ", d.id);
+             return "#eee";
+           }
+          });
+
+        }else{
+          //console.log("remainingEdge is not 1 changing");
+
+          owners.selectAll("circle").attr("fill", d=> {
+            if (ownerRecord[d.id] || depRecord[d.dep]) {
+             return d.color;
+            }
+            else return "#eee";
+          });
+        }
+      }else{
+         //console.log("spread dep false");
+         if(remainingEdge == 1){
+          owners.selectAll("circle").attr("fill", d=> {
+            if (d.id == onlySource || d.dep == onlyTarget){
+              return d.color;
+            }
+            else{
+              //console.log("d.id eeee ", d.id);
+             return "#eee";
+           }
+          });
+
+         }else{
+          owners.selectAll("circle")
+          .attr("fill", d => {return d.color});
+         }
+      }
+    }//end else dive in
+
+
+  }//end function
+
+  //Toggle Gender button
+  toggleGender.onclick = function() {
+    if(toggleGender.checked){
+      //console.log("gender is checked");
+
+      changeColorGender();
+      changeLegendGender();
+    }else{
+      //console.log("gender is  not checked");
+
+      changeColorDisciplines();
+      changeLegendDisciplines();
+    }
+  };
+
+  //Toggle Dive in
   toggle.onclick = function() {
     //if the dive-in mode is on
     if (toggle.checked) {
       //clear all the edges between departments
       d3.select("#connections").selectAll('path')
       .remove();
+
       //return the orginal color of nodes
-      owners.selectAll("circle")
+      if(toggleGender.checked == false){
+        owners.selectAll("circle")
         .attr("fill", d => {return d.color});
+      }
+
+
       //The function to draw edges in path
       function draw(path, start_point_x, start_point_y, end_point_x, end_point_y) {
         path.moveTo(start_point_x, start_point_y);
@@ -90,7 +332,7 @@
             .attr('stroke', function(d) { return d.color; });
 
         });
-    }
+    } //end if dive in is on
     //if the dive-in mode is off
     else {
       //clear all the dive-in mode edges
@@ -103,7 +345,12 @@
         .attr("cx", d => {return d.pos.x;})
         .attr("cy", d => {return d.pos.y;})
         .attr("r", 10)
-        .attr("fill", d => {return d.color});
+        .attr("fill", function(d){
+          if(toggleGender.checked == false){
+            return d.color;
+          }
+       //   return d.color
+        });
       //draw edges between departments
       drawEdge();
     }
@@ -162,7 +409,7 @@
           .attr('stroke', function(d) { return d.color; });
       });
   }
-	
+  
   d3.json("datasets/Owners.json")
   .then( nodes => {
 
@@ -185,7 +432,8 @@
         if (!toggle.checked)
         {
             //mark which department should be highlighted
-            var selectedDep = [];
+            //var selectedDep = [];
+            selectedDep = [];
             for (i=0; i<71; i++)
               selectedDep.push(0);
 
@@ -196,14 +444,15 @@
             var msgAct = 0;
             var cmpnAct = 0;
 
-            var remainingEdge = 0;
+            remainingEdge = 0;
 
             //if the clicked circle is not gray (already highlighted)
             //There are two situations the cirlce is colored:
-            //1. The original state when no cluter is selected
+            //1. The original state when no cluster is selected
             //2. When you already selected a department and then this time you select another one connected to it
             if ( this.getAttribute("fill")!= "#eee" && this.getAttribute("fill")!="rgb(238, 238, 238)")
             {
+               //console.log("HERRRRREEEEEE");
                 d3.select('#connections').selectAll('path')
                 .transition(t2)
                 .attr("stroke", function(d) {
@@ -259,6 +508,7 @@
             //if the clicked circle is gray, we should change the visualization to highlight it and its connected departments
             else
             {
+                //console.log("HERRRRREEEEEE2222222222222222");
                 d3.select('#connections').selectAll('path')
                 .transition(t2)
                 .attr("stroke", d => { 
@@ -281,9 +531,14 @@
             //for both of the two cases, we just need to fill the node color with selectedDep
             circles.transition(t).
             attr("fill", d => { 
+              //if in selcted dep
               if (selectedDep[d.dep-1])
               {
-                return d.color;
+                //console.log("in selected dep", d.dep);
+                if(toggleGender.checked == false){
+                  return d.color;
+                }
+                
               }
               else
               {
@@ -293,6 +548,8 @@
             })
 
             //if only one edge is left, we'll render the barchart
+            //console.log("remainingEdge == ", remainingEdge);
+
             if (remainingEdge == 1)
             {
                 drawHistogram(likeNum, likeAct, msgNum, msgAct, cmpnNum, cmpnAct)
@@ -301,9 +558,14 @@
             //clicking on reset area will reset all the node color and edge color to orgianl state
             d3.select('#resetArea')
             .on("click", function() {
+              selectedDep = [];
               circles
               .transition(t)
-              .attr('fill', d=>{ return d.color});
+              .attr('fill',function(d){
+                if(toggleGender.checked == false){
+                  return d.color;
+                }
+              });
 
               d3.select('#connections').selectAll('path')
                 .transition(t2)
@@ -313,6 +575,7 @@
 
         //when we are in the dive-in mode
         else {
+          //console.log("in dive in mode");
           //we mainly use this function to get the opacity of edges
           function getStyle(element, attr) {
             if(element.currentStyle) {
@@ -324,10 +587,10 @@
 
           var insideConns = d3.select('#inside_dep_connections').selectAll('path');
           var outsideConns = d3.select('#outside_dep_connections').selectAll('path');
-          var remainingEdge = 0;
+          remainingEdge = 0;
           //record the final source and target
-          var onlySource;
-          var onlyTarget;
+          onlySource = -1;;
+          onlyTarget = -1;;
           var likeNum = 0;
           var msgNum = 0;
           var cmpnNum = 0;
@@ -338,6 +601,8 @@
           //if the circle is already on the spreaded space
           if ( this.getAttribute("cx")!= p.pos.x || this.getAttribute("cy")!= p.pos.y)
           {
+            spreadDep = true;
+            //console.log("circle on the spreaded space");
             insideConns.style('opacity', function(d) {
               //if the edge is connected to a previously selected node
               if (getStyle(this, 'opacity')>0)
@@ -347,6 +612,7 @@
                   remainingEdge = remainingEdge+1;
                   onlySource = d.source;
                   onlyTarget = d.target;
+                  //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
                 }
                 return 0.5
               }
@@ -358,6 +624,8 @@
 
             if (remainingEdge == 1)
             {
+              //console.log("remaining edge 1");
+              //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               insideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.target == onlyTarget) 
                 {
@@ -369,9 +637,17 @@
                 else return getStyle(this, 'opacity');
               });
 
+              //Remaining edge in inside
               circles.attr("fill", d=> {
-                if (d.id == onlySource || d.id == onlyTarget) return d.color;
-                else return "#eee";
+                if (d.id == onlySource || d.id == onlyTarget){
+                  if(toggleGender.checked == false){
+                    return d.color;
+                  }
+                }
+                else{
+                  //console.log("d.id eeee ", d.id);
+                 return "#eee";
+               }
               });
 
               if (likeAct>0)
@@ -405,14 +681,15 @@
 
               //clear all the outside connections
               outsideConns.style('opacity', 0);
-            }
+            }//if remaining edge is one
 
             //if the remainingEdge is not only one, we'll highlight all the individuals and departments connected with this selected individual
             else
             {
               //same way to record the individuals and departments that should be highlighted
-              var ownerRecord = new Array();
-              var depRecord = new Array();
+              //console.log("remaining edge not 1");
+              ownerRecord = new Array();
+              depRecord = new Array();
 
               insideConns.style('opacity', d=>{
                 if (d.source == p.id || d.target == p.id) 
@@ -433,7 +710,11 @@
               });
 
               circles.attr("fill", d=> {
-                if (ownerRecord[d.id] || depRecord[d.dep]) return d.color;
+                if (ownerRecord[d.id] || depRecord[d.dep]) {
+                  if(toggleGender.checked == false){
+                    return d.color;
+                  }
+                }
                 else return "#eee";
               });
             }
@@ -444,6 +725,7 @@
           else
           {
             //count all the connections that are highlighted and connected to the selected department
+            spreadDep = false;
             outsideConns.style('opacity', function(d) {
               if (d.tgt_dep == p.dep && getStyle(this, 'opacity')>0)
               {
@@ -454,6 +736,8 @@
             });
             if (remainingEdge == 1)
             {
+              //console.log("remaing edge 1 highlighted selected department");
+              //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               outsideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.tgt_dep == onlyTarget) 
                 {
@@ -466,7 +750,12 @@
               });
 
               circles.attr("fill", d=> {
-                if (d.id == onlySource || d.dep == onlyTarget) return d.color;
+                if (d.id == onlySource || d.dep == onlyTarget) {
+                   //console.log("onlySource = ", onlySource, "  d.id = ", d.id, "onlyTarget = ", onlyTarget, " d.dep = ", d.dep);
+                  if(toggleGender.checked == false){
+                    return d.color;
+                  }
+                }
                 else return "#eee";
               });
 
@@ -504,6 +793,7 @@
             //if not only one edge is left, then we need to spread that cluster
             else 
             {
+              //console.log("remaing edge not 1 highlighted selected department");
               var idRecord = new Array();
               circles.transition(t)
               .attr("cx", d => {
@@ -528,7 +818,9 @@
                   return 10;
               })
               .attr("fill", d => {
-                  return d.color;
+                  if(toggleGender.checked == false){
+                    return d.color;
+                  }
               });
 
               insideConns.style("opacity", d=> {
@@ -551,13 +843,17 @@
               .attr("cy", d => {return d.pos.y;})
               .attr("r", 10)
               .attr("fill", d => {
-                  return d.color;
+                  if(toggleGender.checked == false){
+                    return d.color;
+                  }
               });
 
               //"delete" all dive-in mode edges
               insideConns.style("opacity", 0);
 
               outsideConns.style("opacity", 0);
+              spreadDep = false;
+              remainingEdge = 0;
 
             });
 
