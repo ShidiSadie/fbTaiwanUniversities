@@ -109,7 +109,14 @@
 
       if(numberSelectedDep == 0){
         owners.selectAll("circle")
-          .attr("fill", "d3d3d3");
+          .attr("fill", function(d){
+            if(d.gender == 2){
+              //female
+              return "#e78ac3";
+            }else{
+              return "#8da0cb";
+            }
+          });
       }else{
         owners.selectAll("circle").transition(t).
         attr("fill", d => { 
@@ -117,7 +124,12 @@
           if (selectedDep[d.dep-1])
           {
             //Change to gender color
-           return "d3d3d3";
+            if(d.gender == 2){
+              //female
+              return "#e78ac3";
+            }else{
+              return "#8da0cb";
+            }
             
           }
           else
@@ -129,14 +141,19 @@
       }
     }else{
       if(spreadDep){
-        //console.log("spread dep true");
+        console.log("spread dep true");
         if(remainingEdge == 1){
-          //console.log("remainingEdge is 1 changing");
+          console.log("remainingEdge is 1 changing");
           //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
           //clicked inside another attach
            owners.selectAll("circle").attr("fill", d=> {
             if (d.id == onlySource || d.id == onlyTarget){
-              return "d3d3d3";
+              if(d.gender == 2){
+                //female
+                return "#e78ac3";
+              }else{
+                return "#8da0cb";
+              }
             }
             else{
               //console.log("d.id eeee ", d.id);
@@ -145,24 +162,34 @@
           });
 
         }else{
-          //console.log("remainingEdge is not 1 changing");
+          console.log(" spread true remainingEdge is not 1 changing");
 
           owners.selectAll("circle").attr("fill", d=> {
             if (ownerRecord[d.id] || depRecord[d.dep]) {
-              return "d3d3d3";
+              if(d.gender == 2){
+                //female
+                return "#e78ac3";
+              }else{
+                return "#8da0cb";
+              }
             }
             else return "#eee";
           });
         }
       }else{
-         //console.log("spread dep false");
+         console.log("spread dep false");
          if(remainingEdge == 1){
-          //console.log("remainingEdge is 1 changing");
+          console.log(" spread false remainingEdge is 1 changing");
           //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
           owners.selectAll("circle").attr("fill", d=> {
             if (d.id == onlySource || d.dep == onlyTarget){
               //console.log("onlySource = ", onlySource, "  d.id = ", d.id, "onlyTarget = ", onlyTarget, " d.dep = ", d.dep);
-              return "d3d3d3";
+              if(d.gender == 2){
+                //female
+                return "#e78ac3";
+              }else{
+                return "#8da0cb";
+              }
             }
             else{
               //console.log("d.id eeee ", d.id);
@@ -170,9 +197,16 @@
            }
           });
          }else{
-          //console.log("remainingEdge is not 1 changing");
+          console.log("spread false remainingEdge is not 1 changing");
           owners.selectAll("circle")
-          .attr("fill", "d3d3d3");
+          .attr("fill", function(d){
+            if(d.gender == 2){
+              //female
+              return "#e78ac3";
+            }else{
+              return "#8da0cb";
+            }
+          });
          }
       }
 
@@ -290,6 +324,16 @@
       if(toggleGender.checked == false){
         owners.selectAll("circle")
         .attr("fill", d => {return d.color});
+      }else{
+        owners.selectAll("circle")
+        .attr("fill",function(d){
+          if(d.gender == 2){
+            //female
+            return "#e78ac3";
+          }else{
+            return "#8da0cb";
+          }
+        });
       }
 
 
@@ -348,9 +392,17 @@
         .attr("fill", function(d){
           if(toggleGender.checked == false){
             return d.color;
+          }else{
+            if(d.gender == 2){
+              //female
+              return "#e78ac3";
+            }else{
+              return "#8da0cb";
+            }
           }
        //   return d.color
         });
+      selectedDep =[];
       //draw edges between departments
       drawEdge();
     }
@@ -537,6 +589,13 @@
                 //console.log("in selected dep", d.dep);
                 if(toggleGender.checked == false){
                   return d.color;
+                }else{
+                  if(d.gender == 2){
+                    //female
+                    return "#e78ac3";
+                  }else{
+                    return "#8da0cb";
+                  }
                 }
                 
               }
@@ -564,6 +623,13 @@
               .attr('fill',function(d){
                 if(toggleGender.checked == false){
                   return d.color;
+                }else{
+                  if(d.gender == 2){
+                    //female
+                    return "#e78ac3";
+                  }else{
+                    return "#8da0cb";
+                  }
                 }
               });
 
@@ -575,7 +641,7 @@
 
         //when we are in the dive-in mode
         else {
-          //console.log("in dive in mode");
+          console.log("in dive in mode");
           //we mainly use this function to get the opacity of edges
           function getStyle(element, attr) {
             if(element.currentStyle) {
@@ -602,7 +668,7 @@
           if ( this.getAttribute("cx")!= p.pos.x || this.getAttribute("cy")!= p.pos.y)
           {
             spreadDep = true;
-            //console.log("circle on the spreaded space");
+            console.log("circle on the spreaded space");
             insideConns.style('opacity', function(d) {
               //if the edge is connected to a previously selected node
               if (getStyle(this, 'opacity')>0)
@@ -624,7 +690,7 @@
 
             if (remainingEdge == 1)
             {
-              //console.log("remaining edge 1");
+              console.log("circle on spread space remaining edge 1");
               //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               insideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.target == onlyTarget) 
@@ -642,6 +708,13 @@
                 if (d.id == onlySource || d.id == onlyTarget){
                   if(toggleGender.checked == false){
                     return d.color;
+                  }else{
+                    if(d.gender == 2){
+                      //female
+                      return "#e78ac3";
+                    }else{
+                      return "#8da0cb";
+                    }
                   }
                 }
                 else{
@@ -687,7 +760,7 @@
             else
             {
               //same way to record the individuals and departments that should be highlighted
-              //console.log("remaining edge not 1");
+              console.log("spread circle remaining edge not 1");
               ownerRecord = new Array();
               depRecord = new Array();
 
@@ -713,6 +786,13 @@
                 if (ownerRecord[d.id] || depRecord[d.dep]) {
                   if(toggleGender.checked == false){
                     return d.color;
+                  }else{
+                    if(d.gender == 2){
+                      //female
+                      return "#e78ac3";
+                    }else{
+                      return "#8da0cb";
+                    }
                   }
                 }
                 else return "#eee";
@@ -726,6 +806,7 @@
           {
             //count all the connections that are highlighted and connected to the selected department
             spreadDep = false;
+            console.log("here hello 1");
             outsideConns.style('opacity', function(d) {
               if (d.tgt_dep == p.dep && getStyle(this, 'opacity')>0)
               {
@@ -736,7 +817,7 @@
             });
             if (remainingEdge == 1)
             {
-              //console.log("remaing edge 1 highlighted selected department");
+              console.log("remaing edge 1 highlighted selected department");
               //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               outsideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.tgt_dep == onlyTarget) 
@@ -754,6 +835,13 @@
                    //console.log("onlySource = ", onlySource, "  d.id = ", d.id, "onlyTarget = ", onlyTarget, " d.dep = ", d.dep);
                   if(toggleGender.checked == false){
                     return d.color;
+                  }else{
+                    if(d.gender == 2){
+                      //female
+                      return "#e78ac3";
+                    }else{
+                      return "#8da0cb";
+                    }
                   }
                 }
                 else return "#eee";
@@ -793,7 +881,7 @@
             //if not only one edge is left, then we need to spread that cluster
             else 
             {
-              //console.log("remaing edge not 1 highlighted selected department");
+              console.log("remaing edge not 1 highlighted selected department");
               var idRecord = new Array();
               circles.transition(t)
               .attr("cx", d => {
@@ -820,6 +908,13 @@
               .attr("fill", d => {
                   if(toggleGender.checked == false){
                     return d.color;
+                  }else{
+                    if(d.gender == 2){
+                      //female
+                      return "#e78ac3";
+                    }else{
+                      return "#8da0cb";
+                    }
                   }
               });
 
@@ -845,6 +940,13 @@
               .attr("fill", d => {
                   if(toggleGender.checked == false){
                     return d.color;
+                  }else{
+                    if(d.gender == 2){
+                      //female
+                      return "#e78ac3";
+                    }else{
+                      return "#8da0cb";
+                    }
                   }
               });
 
