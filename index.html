@@ -216,6 +216,20 @@
           </div>
         </div>
 
+        <div id ="temporalNetwork">
+          <form style="font: 12px var(--sans-serif); font-variant-numeric: tabular-nums; display: flex; height: 33px; align-items: center;">
+            <button id="b1Play" type="button" style="margin-right: 0.2em; width: 4em;">Play</button>
+            <button id="b2Load" type="button" oncstyle="margin-right: 0.2em; width: 3em;">Load</button>
+            <label style="display: flex; align-items: center;">
+              <svg id ="slider1" height="18" width="150"></svg>
+              <output id="outputMY" style="margin-left: 0.2em;">mm-yyyy, e# c#</output>
+            </label>
+<!--             <button id="b3Internal" type="button" style="margin-right: 0.2em; width: 1.5em;">I</button>
+            <button id="b4External" type="button" style="margin-right: 0.9em; width: 1.5em;">E</button> -->
+          </form>
+        </div>
+
+
 	      <svg width="132pt" height="210pt" id="edgeInformation" viewBox="0.00 0.00 220 350">
 
           <text x="30" y="20" fill="black">like</text>
@@ -233,9 +247,13 @@
 
 	      </svg>
       </div>
+
+
       
 
     </div>
+    <script src="temporalNetwork.js"></script>
     <script src="main.js"></script>
+    <script src="dataProcess.js"></script>
   </body>
 </html>

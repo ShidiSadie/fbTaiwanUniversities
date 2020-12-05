@@ -202,3 +202,33 @@ h4 {
 	border:2px solid #a1a1a1;
 	border-radius:10px;
 }
+
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 3px;
+}
+
+.track-inset {
+  stroke: #ddd;
+  stroke-width: 3px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  cursor: crosshair;
+}
+
+.handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: 0.5;
+  stroke-width: 1.25px;
+}
