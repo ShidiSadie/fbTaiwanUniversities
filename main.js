@@ -284,7 +284,7 @@ function draw(temporal_inside_data, temporal_outside_data){
           //clicked inside another attach
           //Change color for only selected node and other node
            owners.selectAll("circle").attr("fill", d=> {
-            console.log("d.id = ", d.id)
+            //console.log("d.id = ", d.id)
             if (d.id == onlySource || d.id == onlyTarget){
               if(d.gender == 2){
                 //female
@@ -695,11 +695,16 @@ function draw(temporal_inside_data, temporal_outside_data){
     //Set up owners per dep
     //Puts owner id into dep function
     nodes.forEach(function(d){
-      if(d.id == 1){
-        console.log("Id 1 at ", d.dep);
-      }
       ownersPerDep[d.dep - 1].push(d.id);
     });
+
+    d3.select("#dimensionsList").selectAll('input').on("change", function(d){
+        //console.log("changed to ", this.value);
+        listing( d3.select('#outside_dep_connections').selectAll('path'), names, circles, this.value);
+    } )
+
+    //console.log(" owners heeeereee ", circles);
+    listing( d3.select('#outside_dep_connections').selectAll('path'), names, circles, "extEdges");
 
     //Key function to implement interaction response in terms of different situations
     function clicked(p) {
@@ -1251,7 +1256,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             }); //reset area
         }//else in dive in mode
         else if(!toggle.checked && toggleCompare.checked){
-          console.log("in compare mode need to pick two deps and reset area");
+          //console.log("in compare mode need to pick two deps and reset area");
           var insideConns = d3.select('#inside_dep_connections').selectAll('path');
           var outsideConns = d3.select('#outside_dep_connections').selectAll('path');
 
@@ -1286,12 +1291,12 @@ function draw(temporal_inside_data, temporal_outside_data){
                 return draw2( d3.path(), 4*d.start_pos.x+395, 4*d.start_pos.y+340, d.end_pos.x, d.end_pos.y);
               })
               .style("opacity", 0);
-                console.log("reset area in one dep chosen");
+                //console.log("reset area in one dep chosen");
             });
 
           if(departmentChosen.length == 0){
-            console.log("no dep chosen");
-            console.log("clicked on dep so expand and add to chosen ", p.dep);
+            // console.log("no dep chosen");
+            // console.log("clicked on dep so expand and add to chosen ", p.dep);
             //MAYBE p.dep-1
             departmentChosen.push(p.dep);
             idRecord = new Array();
@@ -1363,7 +1368,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             });
 
           }else if(departmentChosen.length == 1){
-            console.log("one dep chosen");
+            //console.log("one dep chosen");
             departmentChosen.push(p.dep);
             var x_pos = new Array();
 
@@ -1430,7 +1435,7 @@ function draw(temporal_inside_data, temporal_outside_data){
               if (idRecord[d.source] ){
                 //console.log("spreading_pos ", d.)
                 if(d.tgt_dep == p.dep){
-                  console.log("herer");
+                  //console.log("herer");
                   return draw2( d3.path(), 4*d.start_pos.x+5, 4*d.start_pos.y+340,  4*d.end_pos.x+805, 4*d.end_pos.y+340);
                 }else{
                   return draw2( d3.path(), 4*d.start_pos.x+5, 4*d.start_pos.y+340, d.end_pos.x, d.end_pos.y);
@@ -1464,7 +1469,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             drawComparativeAnalysis(departmentChosen[0], departmentChosen[1], ownersPerDep, d3.select('#inside_dep_connections').selectAll('path'), d3.select('#outside_dep_connections').selectAll('path'), d3.select("#owners").selectAll("circle"));
 
           }else if(departmentChosen.length == 2){
-            console.log("two dep chosen");
+            //console.log("two dep chosen");
             departmentChosen = [];
 
             circles.transition(t)
@@ -1516,7 +1521,7 @@ function draw(temporal_inside_data, temporal_outside_data){
 
       for (var i=0; i<labels.length; i++)
       {
-        console.log("labels at ", i , " = ", labels[i]);
+        //console.log("labels at ", i , " = ", labels[i]);
         if (labels[i].no>=15 && labels[i].no<=53)
         {
           d3.select('defs').append('path')
@@ -1552,15 +1557,6 @@ function draw(temporal_inside_data, temporal_outside_data){
 
       }
   })
-
-  console.log("d3.select('#labels')", d3.select("#labels").selectAll("textPath"));
-  console.log("names = ", names);
-
-  d3.select('#clusterRing').selectAll('textPath').each(function(d, i){
-    console.log("hi");
-    console.log(d, ", ", i);
-  })
-
 
 
 
@@ -1659,5 +1655,5 @@ function draw(temporal_inside_data, temporal_outside_data){
     }
   });
 
-  listing( d3.select('#outside_dep_connections').selectAll('path'), names);
+
 }//end function draw

@@ -185,6 +185,8 @@ function loadingNetwork(currentDep, ownersPerDep, insideConns, outsideConns, own
 	//console.log("inside_filtered = ", inside_filtered);
 	var outside_filtered = getExternalData(currentDep, ownersPerDep, outsideConns, owners, temporal_outside_data);
 
+
+
 	return [inside_filtered, outside_filtered];
 }//end function
 
