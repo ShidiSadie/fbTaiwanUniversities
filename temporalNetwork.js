@@ -157,7 +157,8 @@ function getInternalData(currentDep, ownersPerDep, insideConns, owners, temporal
 	});
 
 	filteredData.sort(compareDate);
-	//console.log("filteredData = ", filteredData);
+	console.log("ownersPerDep", ownersPerDep);
+	console.log("filteredData = ", filteredData , "dep ", currentDep-1);
 	filteredData = checkDataCombos(filteredData);
 	//console.log("elimnate combos filteredData = ", filteredData);
 	return filteredData;
@@ -345,7 +346,8 @@ function updateHandle2(h, handle, x, timeSteps, inside_filtered_data, outside_fi
 
 	var ans = updateNetwork(inside_conns, outside_conns, timeSteps[Math.round(h)], inside_filtered_data, outside_filtered_data, owners);
 	current_index = Math.round(h);
-	d3.select("#outputMY").text(timeSteps[Math.round(h)][1] + "-" + timeSteps[Math.round(h)][0] + ", e" + ans[0] + " c" + ans[1]);
+	//d3.select("#outputMY").text(timeSteps[Math.round(h)][1] + "-" + timeSteps[Math.round(h)][0] + ", e" + ans[0] + " c" + ans[1]);
+	d3.select("#outputMYEC").text(timeSteps[Math.round(h)][1] + "-" + timeSteps[Math.round(h)][0] + ", e" + ans[0] + " c" + ans[1]);
  	d3.select("#b1Play").text("Play");
 	play_pause_toggle = 1;
 }//end function
@@ -358,7 +360,8 @@ function updateHandle(h, handle, x, month, year, edges, count){
 	handle.attr("cx", x(h));
 	// console.log("count", count);
 	//Change text label
-	d3.select("#outputMY").text(month + "-" + year + ", e" + edges + " c" + count);
+	//d3.select("#outputMY").text(month + "-" + year + ", e" + edges + " c" + count);
+	d3.select("#outputMYEC").text(month + "-" + year + ", e" + edges + " c" + count);
 }//end function
 
 //Check if pause button has been hit
@@ -382,7 +385,8 @@ function playTemporalNetwork(inside_filtered_data, outside_filtered_data, timest
 		inside_conns.style("opacity", function(d){
 			return 0;
 		});
-		d3.select("#outputMY").text(0 + "-" + 0 + ", e" +0 + " c" + 0);
+		//d3.select("#outputMY").text(0 + "-" + 0 + ", e" +0 + " c" + 0);
+		d3.select("#outputMYEC").text(0 + "-" + 0 + ", e" +0 + " c" + 0);
 	}
 	
 	//Update domain to length

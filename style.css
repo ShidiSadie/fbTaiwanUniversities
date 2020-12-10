@@ -18,6 +18,10 @@
 	-webkit-transform: rotateX(180deg) scaleX(0.196) scaleY(0.196) translateX(1100px) translateY(-1900px);
 }
 
+#temporal_network_label {
+	-webkit-transform: rotateX(180deg) scaleX(0.196) scaleY(0.196) translateX(1100px) translateY(-1900px);
+}
+
 /*text {
 	-webkit-transform: rotateZ(180deg)
 }*/
@@ -30,6 +34,10 @@
 
 #diveInDesc {
 	margin: 5px;
+}
+
+#compareMode {
+	margin-top: 15px;
 }
 
 /* The switch - the box around the slider */
@@ -102,10 +110,20 @@ input:checked + .slider:before {
 	float: left;
 }
 
-svg {
+#clusterRing {
 	-webkit-transform: rotateX(180deg);
 	float: left;
 }
+
+#projectionSpace{
+	float: left;
+	width: 300px;
+	height: 300px;
+	border:2px solid #a1a1a1;
+	border-radius:10px;
+}
+
+
 
 #ConnLegend {
 	width: 250px;
@@ -147,6 +165,10 @@ h4 {
 	margin-top: 10px;
 	border:2px solid #a1a1a1;
 	border-radius:10px;
+}
+
+.mostImportantFeature{
+	margin-left: 55px;
 }
 
 .ownerItem {
@@ -201,6 +223,7 @@ h4 {
 	margin-top: 10px;
 	border:2px solid #a1a1a1;
 	border-radius:10px;
+	float: left;
 }
 
 .track,

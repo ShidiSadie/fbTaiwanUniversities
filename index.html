@@ -23,10 +23,18 @@
         </label>
       </div>
 
-      <div id="diveInDesc">
+      <div id="genderMode">
         Gender Mode: 
         <label class="switch">
           <input type="checkbox" id="toggleGender">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+    <div id="compareMode">
+        Compare Mode: 
+        <label class="switch">
+          <input type="checkbox" id="toggleCompare">
           <span class="slider round"></span>
         </label>
       </div>
@@ -222,8 +230,9 @@
             <button id="b2Load" type="button" oncstyle="margin-right: 0.2em; width: 3em;">Load</button>
             <label style="display: flex; align-items: center;">
               <svg id ="slider1" height="18" width="150"></svg>
-              <output id="outputMY" style="margin-left: 0.2em;">mm-yyyy, e# c#</output>
+              <!-- <output id="outputMY" style="margin-left: 0.2em;">mm-yyyy, e# c#</output> -->
             </label>
+            <button id="b3ZoomIn" type="button" oncstyle="margin-right: 0.2em; width: 3em;">ZoomIn</button>
 <!--             <button id="b3Internal" type="button" style="margin-right: 0.2em; width: 1.5em;">I</button>
             <button id="b4External" type="button" style="margin-right: 0.9em; width: 1.5em;">E</button> -->
           </form>
@@ -246,12 +255,45 @@
           <text x="165" id="companionCount" y="45" fill="black">0</text>
 
 	      </svg>
+
+        <div id="orderListDep" style= "float: left; margin-left: 1em; margin-top: 10px; width: 132pt; height: 210pt; border:2px solid #a1a1a1;border-radius:10px; overflow-y: auto">
+        </div>
       </div>
 
 
-      
-
     </div>
+
+    <div id="compareNetworkSpace"  >
+        <svg id="projectionSpace" style= "margin-left: 10em;"></svg>
+
+        <div id="groupA"  style= "float: left; width: 190px; height: 200px; margin-left: 1em" >
+
+          <div id="colorLegendCompare" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 180px; height: 100px; border:2px solid #a1a1a1;border-radius:10px;">
+            <h4>Color Legend</h4>
+          </div>
+
+          <div id="mostImportantFeature" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 180px; height: 50px; border:2px solid #a1a1a1; border-radius:10px;">
+            <h4>Most Important Feature</h4>
+          </div>
+
+          <button id="intExtRatio" type="button" style="margin-left: 2em; width: 10em; float: left">Int/Ext Ratio</button>
+
+        </div>
+
+
+        <div id="groupB"  style= "float: left; width: 300px; height: 200px; margin-left: 1em" >
+          <div id= "statsSummaryA" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 0.5em; float: left; width: 250px; height: 140px; border:2px solid #a1a1a1;border-radius:10px;">
+            <h4>Stats Summary Target</h4>
+          </div>
+
+          <div id= "statsSummaryB" style="margin-left: 0.1em; margin-right: 11em;  float: left; width: 250px; height: 140px; border:2px solid #a1a1a1;border-radius:10px;">
+            <h4>Stats Summary Background</h4>
+          </div>
+
+        </div>
+    </div>
+
+    <script src="comparativeAnalysis.js"></script>
     <script src="temporalNetwork.js"></script>
     <script src="main.js"></script>
     <script src="dataProcess.js"></script>
