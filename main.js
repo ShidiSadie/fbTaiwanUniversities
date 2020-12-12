@@ -1449,18 +1449,27 @@ function draw(temporal_inside_data, temporal_outside_data){
               }
             } )
             .style("opacity", d=> {
-              if (idRecord[d.source]){
-                if(d.tgt_dep == p.dep){
+              if (idRecord[d.source]){ //target source to something
+                 console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " p.dep) ", p.dep);
+                if(d.tgt_dep == p.dep){ //target source to background dep
                   //Currently not showing link between two edges because they dont point to an exact node
                   return 0;
                 }else{
                   return 1;
                 }
               }
-              else if(idRecord2[d.source])
-                return 1;
-              else
+              else if(idRecord2[d.source]){ // background source to something
+                //background source to target dep
+                console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " departmentChosen[0]");
+                if(d.tgt_dep == departmentChosen[0]){
+                  return 0;
+                }else{
+                  return 1;
+                }
+              }
+              else{
                 return 0; 
+              }
             });
 
 

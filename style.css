@@ -37,7 +37,12 @@
 }
 
 #compareMode {
-	margin-top: 15px;
+	margin: 5px;
+}
+
+#genderMode {
+	margin: 5px;
+	margin-top: 20px;
 }
 
 /* The switch - the box around the slider */
@@ -171,7 +176,7 @@ h4 {
 }
 
 .mostImportantFeature{
-	margin-left: 55px;
+	margin-left: 10px;
 }
 
 .ownerItem {
@@ -258,3 +263,29 @@ h4 {
   stroke-opacity: 0.5;
   stroke-width: 1.25px;
 }
+
+
+.lasso path {
+  stroke: rgb(80, 80, 80);
+  stroke-width: 2px;
+}
+
+.lasso .drawn {
+  fill-opacity: .05;
+}
+
+.lasso .loop_close {
+  fill: none;
+  stroke-dasharray: 4, 4;
+}
+
+.lasso .origin {
+  fill: #3399FF;
+  fill-opacity: .5;
+}
+
+.selected {
+  stroke: #000;
+  stroke-width: 1px;
+}
+

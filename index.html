@@ -16,14 +16,23 @@
   <body>
     <div id="tab">
       <div id="diveInDesc">
-        Dive-in Department Mode: 
+        Dive-in Department View: 
         <label class="switch">
           <input type="checkbox" id="toggle">
           <span class="slider round"></span>
         </label>
       </div>
 
-      <div id="genderMode">
+      <div id="compareMode">
+        Compare Two Departments   
+        View: 
+        <label class="switch" style="margin-right: 55px;">
+          <input type="checkbox" id="toggleCompare">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div id="genderMode" style="margin-right: 30px;" >
         Gender Mode: 
         <label class="switch">
           <input type="checkbox" id="toggleGender">
@@ -31,14 +40,6 @@
         </label>
       </div>
 
-    <div id="compareMode">
-        Compare Mode: 
-        <label class="switch">
-          <input type="checkbox" id="toggleCompare">
-          <span class="slider round"></span>
-        </label>
-      </div>
-      
     </div>
     <div id="container"> 
       <svg width="500pt" height="500pt" id="clusterRing" viewBox="0.00 0.00 550 550">
@@ -232,7 +233,7 @@
               <svg id ="slider1" height="18" width="150"></svg>
               <!-- <output id="outputMY" style="margin-left: 0.2em;">mm-yyyy, e# c#</output> -->
             </label>
-            <button id="b3ZoomIn" type="button" oncstyle="margin-right: 0.2em; width: 3em;">ZoomIn</button>
+<!--             <button id="b3ZoomIn" type="button" oncstyle="margin-right: 0.2em; width: 3em;">ZoomIn</button> -->
 <!--             <button id="b3Internal" type="button" style="margin-right: 0.2em; width: 1.5em;">I</button>
             <button id="b4External" type="button" style="margin-right: 0.9em; width: 1.5em;">E</button> -->
           </form>
@@ -271,13 +272,13 @@
     <div id="compareNetworkSpace"  >
         <svg id="projectionSpace" style= "margin-left: 10em;"></svg>
 
-        <div id="groupA"  style= "float: left; width: 190px; height: 200px; margin-left: 1em" >
+        <div id="groupA"  style= "float: left; width: 220px; height: 20px; margin-left: 1em" >
 
-          <div id="colorLegendCompare" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 180px; height: 100px; border:2px solid #a1a1a1;border-radius:10px;">
+          <div id="colorLegendCompare" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 210px; height: 100px; border:2px solid #a1a1a1;border-radius:10px;">
             <h4>Color Legend</h4>
           </div>
 
-          <div id="mostImportantFeature" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 180px; height: 50px; border:2px solid #a1a1a1; border-radius:10px;">
+          <div id="mostImportantFeature" style="margin-left: 0.1em; margin-right: 1em; margin-bottom: 1em; float: left; width: 210px; height: 50px; border:2px solid #a1a1a1; border-radius:10px; overflow-y: auto">
             <h4>Most Important Feature</h4>
           </div>
 
@@ -298,6 +299,7 @@
         </div>
     </div>
 
+     <script src="d3-lasso.js"></script>
     <script src="comparativeAnalysis.js"></script>
     <script src="temporalNetwork.js"></script>
     <script src="main.js"></script>
