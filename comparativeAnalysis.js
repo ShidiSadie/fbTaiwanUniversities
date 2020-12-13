@@ -1,4 +1,5 @@
   var currentListingDimension = "extEdges";
+  var extRatioToggle = 0;
 
 
   function inArrayComp(arr, d){
@@ -250,10 +251,147 @@ function listing(outside_connections, names, circles, value){
 }//end function
 
 
+function changeColorRep(network_representation_data, minRatio, maxRatio, minFeature, maxFeature, points){
+	console.log("network_representation_data ", network_representation_data);
+
+		console.log(" Ratio ", minRatio , ", ", maxRatio);
+		console.log("feature ", minFeature , ", ", minFeature);
+
+	if(extRatioToggle == 1){
+		//Do extRatio
+
+		//Draw color gradient
+		d3.select("#colorLegendCompare").selectAll("svg").remove();
+		var colorData = [{"color":"yellow", "value": minRatio}, {"color":"purple", "value":maxRatio}];
+		//{"color":"white", "value":((minFeature + maxFeature)/2)}
+
+		var xColorScale = d3.scaleLinear()
+		.range([0,160])
+		.domain([minRatio,maxRatio]);
+
+		var xTicks = [minRatio, maxRatio];
+
+		//console.log("xTicks ", xTicks);
+
+		var xAxis = d3.axisBottom(xColorScale)
+        .tickSize(8 * 2)
+        .tickValues(xTicks);
+
+		var svg = d3.select("#colorLegendCompare").append("svg");
+
+		var colorScale = d3.scaleLinear()
+			.range(["yellow", "purple"])
+			.domain([minRatio, maxRatio]);
+
+		var colorBar = svg.append('g').attr("width", 200).attr("height", 10).attr("transform", "translate(30,0)");
+		var defs = svg.append("defs");
+		var linearGrad = defs.append("linearGradient").attr("id", "myGradient");
+
+		linearGrad.selectAll("stop")
+			.data(colorData)
+			.enter().append("stop")
+			  .attr("offset", d => ((d.value - minRatio) / (maxRatio - minRatio) * 100) + "%")
+	          .attr("stop-color", d => d.color);
+
+	    colorBar.append("rect")
+	        .attr("width", 160)
+	        .attr("height", 8)
+	        .attr("stroke", "black")
+	        .attr("stroke-wdith", 1)
+	        .style("fill", "url(#myGradient)");
+
+	    colorBar.append("g")
+	        .call(xAxis)
+	      .select(".domain").remove();
+
+	    var featureTextColor = svg.append('g').attr("width", 200).attr("height", 10).attr("transform", "translate(10,50)")
+
+	    featureTextColor.append("text")
+			.attr("fill", "black")
+			.style("font-size", "14px")
+			.attr("x", 25)
+			.text("External Interactions Ratio");
+
+		points.style("fill", function(d){
+			return colorScale(d.out_in_ratio);
+		})
+
+
+
+
+
+
+
+	}else{
+		//Do most important feature
+
+		//Draw color gradient
+		d3.select("#colorLegendCompare").selectAll("svg").remove();
+		var colorData = [{"color":"yellow", "value": minFeature}, {"color":"purple", "value":maxFeature}];
+		//{"color":"white", "value":((minFeature + maxFeature)/2)}
+
+		var xColorScale = d3.scaleLinear()
+		.range([0,160])
+		.domain([minFeature,maxFeature]);
+
+		var xTicks = [minFeature, maxFeature];
+
+		//console.log("xTicks ", xTicks);
+
+		var xAxis = d3.axisBottom(xColorScale)
+        .tickSize(8 * 2)
+        .tickValues(xTicks);
+
+		var svg = d3.select("#colorLegendCompare").append("svg");
+
+		var colorScale = d3.scaleLinear()
+			.range(["yellow", "purple"])
+			.domain([minFeature, maxFeature]);
+
+		var colorBar = svg.append('g').attr("width", 200).attr("height", 10).attr("transform", "translate(30,0)");
+		var defs = svg.append("defs");
+		var linearGrad = defs.append("linearGradient").attr("id", "myGradient");
+
+		linearGrad.selectAll("stop")
+			.data(colorData)
+			.enter().append("stop")
+			  .attr("offset", d => ((d.value - minFeature) / (maxFeature - minFeature) * 100) + "%")
+	          .attr("stop-color", d => d.color);
+
+	    colorBar.append("rect")
+	        .attr("width", 160)
+	        .attr("height", 8)
+	        .attr("stroke", "black")
+	        .attr("stroke-wdith", 1)
+	        .style("fill", "url(#myGradient)");
+
+	    colorBar.append("g")
+	        .call(xAxis)
+	      .select(".domain").remove();
+
+	    var featureTextColor = svg.append('g').attr("width", 200).attr("height", 10).attr("transform", "translate(10,50)")
+
+	    featureTextColor.append("text")
+			.attr("fill", "black")
+			.style("font-size", "14px")
+			.attr("x", 25)
+			.text("Most Important Feature");
+
+		points.style("fill", function(d){
+			return colorScale(d.feature_value);
+		})
+
+
+	}
+
+
+}
+
+
 function cc(pair_num, inside_connections, outside_connections, ownersPerDep, targetDep, backgroundDep, owners){
 	console.log("cc pir_num", pair_num);
 
-	d3.json("datasets/small_network_representations.json")
+	d3.json("datasets/network_representations.json")
 	.then( data => {
 
 		var network_representations_index = pair_num;
@@ -386,15 +524,15 @@ function cc(pair_num, inside_connections, outside_connections, ownersPerDep, tar
 		      })
 
 		      inside_connections.style("opacity", function(d){
-		      	if(checkInSelectedData(d.source, selectedData)){
-		      		console.log(d.source);
+		      	if(checkInSelectedData(d.source, selectedData) || checkInSelectedData(d.target, selectedData) ){
+		      		console.log(d.source, ", ", d.target);
 		      		return 1;
 		      	}else{
 		      		return 0;
 		      	}
 		      })
 		      .attr("stroke", function(d){
-		      	if(checkInSelectedData(d.source, selectedData) && d.color != "#eeeeee"){
+		      	if((checkInSelectedData(d.source, selectedData) || checkInSelectedData(d.target, selectedData)) && d.color != "#eeeeee"){
 		      		console.log(d.source);
 		      		return "black";
 		      	}else{
@@ -427,6 +565,42 @@ function cc(pair_num, inside_connections, outside_connections, ownersPerDep, tar
 
 
 
+	    d3.select("#extRatio").on("click", function(){
+	    	console.log("button pressed");
+
+	    	if(extRatioToggle == 0){
+	    		extRatioToggle = 1;
+	    		d3.select(this).text("Most Important Feature");
+
+	    		changeColorRep(network_representation_data, minRatio, maxRatio, minFeature, maxFeature, points);
+	    	}else{
+	    		extRatioToggle = 0;
+	    		d3.select(this).text("External Interactions Ratio");
+
+	    		changeColorRep(network_representation_data, minRatio, maxRatio, minFeature, maxFeature, points);
+	    	}
+
+
+
+          
+          // d3.select("#loaded").attr("fill", "transparent");
+          // // console.log("play button clicked");
+          // // console.log("play button clicked inside_data = ", inside_data);
+          // if(play_pause_toggle == 1){
+          //   d3.select(this).text("Pause");
+          //   play_pause_toggle = 0;
+          //   playTemporalNetwork(inside_data, outside_data, timeSteps, d3.select('#inside_dep_connections').selectAll('path'), d3.select('#outside_dep_connections').selectAll('path'), currentDiveInDep, ownersPerDep, owners.selectAll("circle"), handle , x);
+          //   //console.log(" current_index_play = ", current_index);
+          //   playedTemporalNetwork = true;
+          // }else{
+          //   //console.log("try pausing");
+          //   d3.select(this).text("Play");
+          //   play_pause_toggle = 1;
+          // }
+        });
+
+
+
 
 		//console.log("net -rep ", data[0].feature);
 
@@ -439,6 +613,8 @@ function cc(pair_num, inside_connections, outside_connections, ownersPerDep, tar
 		var maxY = -200;
 		var minFeature = 200;
 		var maxFeature = -200;
+		var minRatio = 200;
+		var maxRatio = -200;
 		var numNodesCount = 0;
 		var arrData = [];
 
@@ -469,6 +645,14 @@ function cc(pair_num, inside_connections, outside_connections, ownersPerDep, tar
 
 				if(d.feature_value > maxFeature){
 					maxFeature = d.feature_value;
+				}
+
+				if(d.out_in_ratio < minRatio){
+					minRatio = d.out_in_ratio;
+				}
+
+				if(d.out_in_ratio > maxRatio){
+					maxRatio = d.out_in_ratio;
 				}
 			}
 		})
@@ -650,7 +834,7 @@ function drawComparativeAnalysis(targetDep, backgroundDep, ownersPerDep, inside_
 
 	var pair_num = -1;
 
-	d3.json("datasets/small_pairs_mapping.json")
+	d3.json("datasets/pairs_mapping.json")
 	.then( data => {
 		data.every(function(d,i){
 			console.log("data d", d);
@@ -659,12 +843,12 @@ function drawComparativeAnalysis(targetDep, backgroundDep, ownersPerDep, inside_
 				return false;
 			}
 			//pair_num++;
-			console.log("pair_num now ", pair_num);
+			//console.log("pair_num now ", pair_num);
 			return true;
 		})
 
 		if(pair_num != -1){
-			console.log("owners in comp ",owners);
+			//console.log("owners in comp ",owners);
 			cc(pair_num, inside_connections, outside_connections, ownersPerDep, targetDep, backgroundDep, owners );
 		}else{
 			console.log("Not in small pairs mapping!");

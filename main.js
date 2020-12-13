@@ -896,7 +896,7 @@ function draw(temporal_inside_data, temporal_outside_data){
           if ( this.getAttribute("cx")!= p.pos.x || this.getAttribute("cy")!= p.pos.y)
           {
             spreadDep = true;
-            //console.log("circle on the spreaded space");
+            console.log("circle on the spreaded space p.id", p.id);
             insideConns.style('opacity', function(d) {
               //if the edge is connected to a previously selected node
               if (getStyle(this, 'opacity')>0)
@@ -919,7 +919,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             if (remainingEdge == 1)
             {
               //console.log("circle on spread space remaining edge 1");
-              //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
+              console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               insideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.target == onlyTarget) 
                 {
@@ -928,6 +928,7 @@ function draw(temporal_inside_data, temporal_outside_data){
                   cmpnAct = d.companion;
                   return 1;
                 }
+                //Should this be 0??????????????
                 else return getStyle(this, 'opacity');
               });
 
@@ -1034,7 +1035,7 @@ function draw(temporal_inside_data, temporal_outside_data){
           {
             //count all the connections that are highlighted and connected to the selected department
             spreadDep = false;
-            //console.log("here hello 1 currentDiveInDep = ", p.dep);
+            console.log("here hello 1 currentDiveInDep = ", p.dep);
             currentDiveInDep = p.dep;
             outsideConns.style('opacity', function(d) {
               if (d.tgt_dep == p.dep && getStyle(this, 'opacity')>0)
@@ -1047,7 +1048,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             if (remainingEdge == 1)
             {
               //console.log("remaing edge 1 highlighted selected department");
-              //console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
+              console.log("onlySource = ", onlySource, " onlyTarget = ", onlyTarget);
               outsideConns.style('opacity', function(d) {
                 if (d.source == onlySource && d.tgt_dep == onlyTarget) 
                 {
@@ -1476,6 +1477,10 @@ function draw(temporal_inside_data, temporal_outside_data){
 
             //Call comparative analysis here!!!!!!!!!!!!!!!!
             drawComparativeAnalysis(departmentChosen[0], departmentChosen[1], ownersPerDep, d3.select('#inside_dep_connections').selectAll('path'), d3.select('#outside_dep_connections').selectAll('path'), d3.select("#owners").selectAll("circle"));
+
+
+
+
 
           }else if(departmentChosen.length == 2){
             //console.log("two dep chosen");
