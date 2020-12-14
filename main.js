@@ -1,12 +1,7 @@
-//This is where the main draw function si
+//This is where the main draw function is
 
 function draw(temporal_inside_data, temporal_outside_data){
 
-
-
-
-
- // let zoom = d3.zoom().on("zoom", zoomed);
   //The blank area to reset edges and node color
   d3.select('#clusterRing')
   .append('g').attr('id', 'resetArea')
@@ -41,105 +36,25 @@ function draw(temporal_inside_data, temporal_outside_data){
   d3.select("#clusterRing").append("g")
     .attr("id", 'temporal_network_label');
 
-      d3.select("#temporal_network_label").append("text")
-        .attr("id", "outputMYEC")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "50px")
-        .attr("fill", "transparent")
-      .attr("transform", "translate(255,-400)")
-      .attr("dy", "0em")
-       .text("mm-yy, #e #c");
+  d3.select("#temporal_network_label").append("text")
+    .attr("id", "outputMYEC")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "50px")
+    .attr("fill", "transparent")
+  .attr("transform", "translate(255,-400)")
+  .attr("dy", "0em")
+   .text("mm-yy, #e #c");
 
-      d3.select("#temporal_network_label").append("text")
-      .attr("id", "loaded")
-      .attr("transform", "translate(255,-400)")
-       .attr("dy", "1em")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "50px")
-        .attr("fill", "transparent")
-       .text("LOADED");
-  var current_zoom_in = 1;
-  var current_zoom_in2 = 1;
-  
-
-  d3.select("#b3ZoomIn").on("click", function(){
-    console.log("ZOOOOOMing");
-    //zoom.scaleBy(d3.select("#clusterRing").transition().duration(750), 1.2);
-    zoomClicked(4,4);
-  })
-
-  function getX(source, x_add, y_add){
-    var answ = 0;
-    console.log("d3.select owners", d3.select("#owners").selectAll("circle").attr("cx"))
-    d3.select("#owners").selectAll("circle").each(function(d,i){
-      if(d.id == source){
-        console.log("found ", d.id, " and ", source, "at ", i);
-        // var tr = d3.select(this).attr("transform").split(",");
-        // var tr1 = tr[0].split("(");
-        // var tr2 = tr1[1].split(",");
-
-       // console.log(d3.select(this).attr("transform").attr("translate"))
-        answ = [(4*d.spreading_pos.x+395 + x_add), (4*d.spreading_pos.y+340 + y_add)];
-        //break;
-      }
-    })
-    console.log("answ = ", answ);
-    return answ;
-  }
-
-  function zoomClicked(translate, scale){
-    console.log("ZOOOOOMing here", d3.select("#clusterRing"));
-    current_zoom_in = current_zoom_in + 0.5;
-    current_zoom_in2 = current_zoom_in2 + 0.05;
-    //d3.select("#clusterRing").attr("transform", "translate(" + translate + ")scale(" + scale + ")");
-    // d3.select("#clusterRing").selectAll("g").attr("transform", "scale(4)");
-    // d3.select("#connections").selectAll("path").attr("transform", "scale(4)");
-    d3.select("#inside_dep_connections").selectAll("path").attr("transform", function(d){
-      if(ownersPerDep[currentDiveInDep-1].includes(d.source)){
-        console.log("found owner");
-       return "translate(" + (-200 * (current_zoom_in-0.5)) + "," + (-300 * (current_zoom_in-0.5)) + "),scale(" + current_zoom_in +")";
-      }
-      return "translate(0,0)";
-    });
+  d3.select("#temporal_network_label").append("text")
+  .attr("id", "loaded")
+  .attr("transform", "translate(255,-400)")
+   .attr("dy", "1em")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "50px")
+    .attr("fill", "transparent")
+   .text("LOADED");
 
 
-    d3.select("#owners").selectAll("circle").attr("transform", function(d,i){
-      if (currentDiveInDep == d.dep){
-        
-        var width = d3.select("#clusterRing").style("width").split("p");
-        var final_width = parseInt(width[0]);
-        console.log("found dep", d.dep , "at cx ",   d3.select(this).attr("cx"), " center is ",  final_width );
-        var new_x =  (d3.select(this).attr("cx") - (final_width/2)) * current_zoom_in + (final_width/2);
-        console.log("new_x " , new_x);
-        console.log("cx - new_x " , d3.select(this).attr("cx") - new_x);
-        console.log("cy = ", d3.select(this).attr("cy"))
-        console.log("cy - new_x " , (-200 * (current_zoom_in-0.5)));
-        return "translate(" + (-200 * (current_zoom_in-0.5)) + "," + (-300 * (current_zoom_in-0.5)) + "),scale(" + current_zoom_in +")";
-      }
-      return "translate(0,0)";
-    });
-
-
-
-    d3.select("#outside_dep_connections").selectAll("path") .attr('d', function(d) {
-      if(ownersPerDep[currentDiveInDep-1].includes(d.source)){
-        var x_i = getX(d.source, -200 * (current_zoom_in-0.5), (-300 * (current_zoom_in-0.5)));
-        console.log(" x_i = ", x_i);
-        return draw2( d3.path(), x_i[0], x_i[1], d.end_pos.x, d.end_pos.y); 
-      }else{
-        return draw2( d3.path(), 4*d.start_pos.x+395, 4*d.start_pos.y+340, d.end_pos.x, d.end_pos.y); 
-      }
-
-   } )
-    // d3.select("#labels").selectAll("text").attr("transform", "scale(4)");
-    // d3.select("#temporal_network_label").selectAll("text").attr("transform", "scale(4)");
-  }
-
-  function zoomed() {
-      d3.select("#clusterRing").attr("transform", d3.event.transform);
-  }
-
-  //d3.select("#compMode").attr("transform", "translate(0,200)")
 
   var owners = d3.select('#owners');
   //The transitions for corresponding containers
@@ -222,11 +137,6 @@ function draw(temporal_inside_data, temporal_outside_data){
         
       })
   }//end function
-
-  //Calculate number of external nodes per dep
-
-
-
 
 
   //Changes the color of the nodes to gender colors
@@ -455,7 +365,6 @@ function draw(temporal_inside_data, temporal_outside_data){
         });
       }
 
-
       //edges for dive-in mode are all drawn once the mode is on, but the opacity is all set to 0. 
       //The opacity will change according to the interaction actions
       //load individual-individual edge information from conn_inside_dep.json
@@ -551,8 +460,6 @@ function draw(temporal_inside_data, temporal_outside_data){
           }
         });
       }
-
-
 
       //edges for dive-in mode are all drawn once the mode is on, but the opacity is all set to 0. 
       //The opacity will change according to the interaction actions
@@ -705,6 +612,8 @@ function draw(temporal_inside_data, temporal_outside_data){
 
     //console.log(" owners heeeereee ", circles);
     listing( d3.select('#outside_dep_connections').selectAll('path'), names, circles, "extEdges");
+
+    var saveDep = -1;
 
     //Key function to implement interaction response in terms of different situations
     function clicked(p) {
@@ -890,8 +799,7 @@ function draw(temporal_inside_data, temporal_outside_data){
           var likeAct = 0;
           var msgAct = 0;
           var cmpnAct = 0;
-
-
+ 
           //if the circle is already on the spreaded space
           if ( this.getAttribute("cx")!= p.pos.x || this.getAttribute("cy")!= p.pos.y)
           {
@@ -1040,10 +948,13 @@ function draw(temporal_inside_data, temporal_outside_data){
             outsideConns.style('opacity', function(d) {
               if (d.tgt_dep == p.dep && getStyle(this, 'opacity')>0)
               {
+                console.log(" in here adddd");
                 remainingEdge = remainingEdge+1;
                 onlySource = d.source;
                 onlyTarget = d.tgt_dep;
               }
+
+ 
             });
             if (remainingEdge == 1)
             {
@@ -1112,6 +1023,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             else 
             {
               //console.log("remaing edge not 1 highlighted selected department");
+              saveDep = p.dep;
               idRecord = new Array();
               circles.transition(t)
               .attr("cx", d => {
@@ -1154,14 +1066,23 @@ function draw(temporal_inside_data, temporal_outside_data){
                 else
                   return 0; });
 
-              outsideConns.style("opacity", 0);
+              //outsideConns.style("opacity", 0);
+              outsideConns.style("opacity", function(d){
+                if(ownersPerDep[p.dep -1].includes(d.source)){
+                  //console.log("found");
+                  return 1;
+                }else{
+                  return 0;
+                }
+              })
+
             }
             
           }
           
           d3.select('#resetArea')
             .on("click", function() {
-              //console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+             // console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
 
               if(playedTemporalNetwork == false){
                 
@@ -1207,7 +1128,17 @@ function draw(temporal_inside_data, temporal_outside_data){
                     });
 
                   //Remove external links
-                  outsideConns.style("opacity", 0);
+                  //outsideConns.style("opacity", 0);
+                  // console.log(" saveDep for eset = ", saveDep);
+                  // console.log(" currentDiveInDep for eset = ", currentDiveInDep);
+                  outsideConns.style("opacity", function(d){
+                    if(idRecord[d.source] && ownersPerDep[saveDep -1].includes(d.source)){
+                      //console.log("found");
+                      return 1;
+                    }else{
+                      return 0;
+                    }
+                  })
 
                   //Show internal links
                   insideConns.style("opacity", d=> {
@@ -1216,8 +1147,6 @@ function draw(temporal_inside_data, temporal_outside_data){
                     else
                       return 0;
                   });
-
-
 
                   spreadDep = false;
                   remainingEdge = 0;
@@ -1236,7 +1165,7 @@ function draw(temporal_inside_data, temporal_outside_data){
                   return d.color;
                 });
 
-                //reset external connections todo!!!!!!!!!!!!!!1
+                //reset external connections todo!!!!!!!!!!!!!!
                 outsideConns.style("opacity", 0).attr("stroke", function(d){
                   return d.color;
                 });
@@ -1451,7 +1380,7 @@ function draw(temporal_inside_data, temporal_outside_data){
             } )
             .style("opacity", d=> {
               if (idRecord[d.source]){ //target source to something
-                 console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " p.dep) ", p.dep);
+                 //console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " p.dep) ", p.dep);
                 if(d.tgt_dep == p.dep){ //target source to background dep
                   //Currently not showing link between two edges because they dont point to an exact node
                   return 0;
@@ -1461,7 +1390,7 @@ function draw(temporal_inside_data, temporal_outside_data){
               }
               else if(idRecord2[d.source]){ // background source to something
                 //background source to target dep
-                console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " departmentChosen[0]");
+                //console.log("d.source", d.source, " d.tgt_dep ", d.tgt_dep, " departmentChosen[0]");
                 if(d.tgt_dep == departmentChosen[0]){
                   return 0;
                 }else{
@@ -1477,10 +1406,6 @@ function draw(temporal_inside_data, temporal_outside_data){
 
             //Call comparative analysis here!!!!!!!!!!!!!!!!
             drawComparativeAnalysis(departmentChosen[0], departmentChosen[1], ownersPerDep, d3.select('#inside_dep_connections').selectAll('path'), d3.select('#outside_dep_connections').selectAll('path'), d3.select("#owners").selectAll("circle"));
-
-
-
-
 
           }else if(departmentChosen.length == 2){
             //console.log("two dep chosen");
@@ -1571,7 +1496,6 @@ function draw(temporal_inside_data, temporal_outside_data){
 
       }
   })
-
 
 
   //Creating time slider
